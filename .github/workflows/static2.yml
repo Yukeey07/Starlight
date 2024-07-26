@@ -21,6 +21,13 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+      # Workaround for SharedArrayBuffer support on GitHub Pages
+      # See: https://github.com/godotengine/godot-docs/issues/7084
+- run: |
+  cd public/play
+  curl -fsSL https://github.com/gzuidhof/coi-serviceworker/raw/master/coi-serviceworker.js > coi-serviceworker.js
+  sed -i 's#\(		<script src="index.js"></script>\)#		<script src="coi-serviceworker.js"></script>\n\1#g' index.html
+
 jobs:
   # Single deploy job since we're just deploying
   deploy:
